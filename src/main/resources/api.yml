@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: Library Service API
+  description: This API allows clients to manage and retrieve books in a library.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /books:
+    get:
+      summary: Get a list of all books
+      operationId: listBooks
+      tags:
+        - Books
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Add a new book
+      operationId: addBook
+      tags:
+        - Books
+      requestBody:
+        description: Book object that needs to be added to the library
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Book created
+  /books/{bookId}:
+    get:
+      summary: Find book by ID
+      operationId: getBookById
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          description: ID of book to return
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detailed information about a book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book not found
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+        - id
+        - title
+        - author
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the book
+        title:
+          type: string
+          description: Title of the book
+        author:
+          type: string
+          description: Name of the author of the book
